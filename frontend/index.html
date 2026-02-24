@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt PWNed</title>
+<link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+<header>
+  <span class="skull">💀</span>
+  <h1 data-text="Prompt PWNed">Prompt PWNed</h1>
+  <p class="subtitle">AI Security Labs / Prompt Injection Training</p>
+  <div class="status-bar">
+    <div class="status-item"><span class="dot"></span><span>SYSTEM ONLINE</span></div>
+    <div class="status-item"><span class="dot"></span><span>4 LABS LOADED</span></div>
+    <div class="status-item"><span class="dot"></span><span>OLLAMA READY</span></div>
+  </div>
+</header>
+
+<main>
+  <p class="section-title">// SELECT LABORATORY //</p>
+
+  <div class="labs-grid">
+
+    <a class="lab-card" href="lab01.html">
+      <span class="lab-num">LAB-01 &nbsp;/&nbsp; DIFFICULTY: LOW</span>
+      <span class="lab-name">[ Direct Injection ]</span>
+      <span class="lab-desc">El modelo tiene instrucciones que protegen información secreta. Tu misión: inyectar comandos directamente en el prompt para extraerla.</span>
+      <div class="difficulty" style="color: var(--green)">
+        <div class="diff-bar filled"></div><div class="diff-bar"></div><div class="diff-bar"></div><div class="diff-bar"></div>
+        <span class="diff-label">BASIC</span>
+      </div>
+    </a>
+
+    <a class="lab-card" href="lab02.html">
+      <span class="lab-num">LAB-02 &nbsp;/&nbsp; DIFFICULTY: MEDIUM</span>
+      <span class="lab-name">[ Context Manipulation ]</span>
+      <span class="lab-desc">El bot tiene un rol corporativo restringido. Manipula el contexto conversacional para cambiar su comportamiento y extraer datos confidenciales.</span>
+      <div class="difficulty" style="color: var(--yellow)">
+        <div class="diff-bar filled"></div><div class="diff-bar filled"></div><div class="diff-bar"></div><div class="diff-bar"></div>
+        <span class="diff-label">MEDIUM</span>
+      </div>
+    </a>
+
+    <a class="lab-card" href="lab03.html">
+      <span class="lab-num">LAB-03 &nbsp;/&nbsp; DIFFICULTY: HARD</span>
+      <span class="lab-name">[ Indirect Injection ]</span>
+      <span class="lab-desc">El modelo procesa documentos externos. Construye un payload dentro del "documento" para que el modelo ejecute instrucciones ocultas.</span>
+      <div class="difficulty" style="color: var(--orange)">
+        <div class="diff-bar filled"></div><div class="diff-bar filled"></div><div class="diff-bar filled"></div><div class="diff-bar"></div>
+        <span class="diff-label">HARD</span>
+      </div>
+    </a>
+
+    <a class="lab-card" href="lab04.html">
+      <span class="lab-num">LAB-04 &nbsp;/&nbsp; DIFFICULTY: EXPERT</span>
+      <span class="lab-name">[ Jailbreak ]</span>
+      <span class="lab-desc">SafetyBot tiene múltiples capas de restricción. Encuentra el exploit creativo para romper sus defensas y liberar al modelo de sus cadenas.</span>
+      <div class="difficulty" style="color: var(--red)">
+        <div class="diff-bar filled"></div><div class="diff-bar filled"></div><div class="diff-bar filled"></div><div class="diff-bar filled"></div>
+        <span class="diff-label">EXPERT</span>
+      </div>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  PROMPT PWNED v1.0 &nbsp;|&nbsp; POWERED BY OLLAMA + FASTAPI &nbsp;|&nbsp; USE RESPONSIBLY
+</footer>
+
+</body>
+</html>
