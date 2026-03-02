@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import httpx
 from schemas import UserChatRequest
 from pydantic import *
+from labs_config import LAB_SYSTEM_PROMPTS, LAB_SECRETS
 
 OLLAMA_SERVER_URL = "http://127.0.0.1:11434"
 
@@ -61,6 +62,14 @@ async def chat(request: UserChatRequest):
             # Añado el último mensaje
             currentMessages.append(request["userMessage"])
 
+            # Añado primero que todo el system prompt
+            # request["laboratoryId"] me va a dar el id del laboratorio que viene del front: "lab1", ... , "lab4"
+            # Y luego busco con esta clave en el diccionario LABS_SYSTEM_PROMPTS
+            
+            system_prompt = LAB_SYSTEM_PROMPTS[request["laboratoryId"]]
+            currentMessages.insert(0, {"role":"system", "content":system_prompt})
+
+
             # Armo el cuerpo de la petición. "stream" va en False porque sino me devuelve la respuesta token por token
             requestBody = {
                 "model": request["aiCurrentModel"],
@@ -86,7 +95,8 @@ async def chat(request: UserChatRequest):
                 "chatResponse":data["message"]["content"],
                 "totalTime":data["total_duration"],
                 "done":data["done"],
-                "doneReason":data["done_reason"]
+                "doneReason":data["done_reason"],
+                "pwned":LAB_SECRETS[request['laboratoryId']] in data['message']['content']
             }
 
             # Devolvemos la respuesta
