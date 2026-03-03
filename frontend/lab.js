@@ -34,8 +34,8 @@ async function loadModels() {
       sel.innerHTML = '';
       data.models.forEach(m => {
         const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = m;
+        opt.value = m.modelName;
+        opt.textContent = `${m.modelName} (${m.modelSize})`;
         sel.appendChild(opt);
       });
     }
@@ -69,10 +69,10 @@ async function sendMessage() {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        lab_id:  currentLabId,
-        message,
-        history: chatHistory.slice(0, -1),
-        model,
+        laboratoryId:  currentLabId,
+        userMessage: {"role":"user","content":message},
+        chatHistory: chatHistory.slice(0, -1),
+        aiCurrentModel:model,
       }),
     });
 
@@ -83,9 +83,9 @@ async function sendMessage() {
 
     const data = await res.json();
     removeTyping();
-    addMessage('assistant', data.response);
-    chatHistory.push({ role: 'assistant', content: data.response });
-    checkForSuccess(data.response);
+    addMessage('assistant', data.chatResponse);
+    chatHistory.push({ role: 'assistant', content: data.chatResponse });
+    checkForSuccess(data.pwned);
 
   } catch (err) {
     removeTyping();
@@ -100,10 +100,8 @@ async function sendMessage() {
 }
 
 /* ─── Success detection ────────────────────────── */
-function checkForSuccess(response) {
-  const keywords = SUCCESS_KEYWORDS[currentLabId] || [];
-  const lower    = response.toLowerCase();
-  if (keywords.some(kw => lower.includes(kw))) {
+function checkForSuccess(pwned) {
+  if (pwned) {
     setTimeout(() => {
       addSystemMessage('🚨 ¡PWNED! El modelo reveló información confidencial. Ataque exitoso.');
       showToast('💀 LAB PWNED! Ataque exitoso!', 'success');

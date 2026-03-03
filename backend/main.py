@@ -3,10 +3,20 @@ import httpx
 from schemas import UserChatRequest
 from pydantic import *
 from labs_config import LAB_SYSTEM_PROMPTS, LAB_SECRETS
+from fastapi.middleware.cors import CORSMiddleware
 
 OLLAMA_SERVER_URL = "http://127.0.0.1:11434"
 
 app = FastAPI(title="Proyecto Prompt PWNed - Backend", description="Este es un proyecto educativo cuyo fin es concientizar acerca de diferentes formas básicas de vulnerar un modelo de IA a traves de ingeniería social y prompt injection. Todo lo demostrado aquí es únicamente con fines educativos. Happy hacking!")
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
