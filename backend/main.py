@@ -1,15 +1,17 @@
 from fastapi import FastAPI
 import httpx
-from schemas import UserChatRequest
+import os
+import json
+from datetime import datetime
+# Use package-relative imports so module resolves when running as backend.main
+from .schemas import UserChatRequest
 from pydantic import *
-from labs_config import LAB_SYSTEM_PROMPTS, LAB_SECRETS
+from .labs_config import LAB_SYSTEM_PROMPTS, LAB_SECRETS
 from fastapi.middleware.cors import CORSMiddleware
 
 OLLAMA_SERVER_URL = "http://127.0.0.1:11434"
 
 app = FastAPI(title="Proyecto Prompt PWNed - Backend", description="Este es un proyecto educativo cuyo fin es concientizar acerca de diferentes formas básicas de vulnerar un modelo de IA a traves de ingeniería social y prompt injection. Todo lo demostrado aquí es únicamente con fines educativos. Happy hacking!")
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
@@ -101,16 +103,44 @@ async def chat(request: UserChatRequest):
             print(f"Esta es la data de la response: \n {data}")
 
             # Creo una variable para guardar la respuesta
+            resp_text = data.get("message", {}).get("content", "")
+
+            # Detectar si la respuesta contiene alguno de los secretos definidos en LAB_SECRETS
+            detected_lab = None
+            for lab_key, secret_val in LAB_SECRETS.items():
+                if secret_val and secret_val in resp_text:
+                    detected_lab = lab_key
+                    break
+
+            pwned_flag = detected_lab is not None
+
             chatResponse = {
-                "chatResponse":data["message"]["content"],
-                "totalTime":data["total_duration"],
-                "done":data["done"],
-                "doneReason":data["done_reason"],
-                "pwned":LAB_SECRETS[request['laboratoryId']] in data['message']['content']
+                "chatResponse": resp_text,
+                "totalTime": data.get("total_duration"),
+                "done": data.get("done"),
+                "doneReason": data.get("done_reason"),
+                "pwned": pwned_flag,
+                "detectedLab": detected_lab,
             }
 
-            # Devolvemos la respuesta
+            # Guardar un registro lineal (JSONL) con el intento y si hubo pwn
+            try:
+                log_entry = {
+                    "ts": datetime.utcnow().isoformat() + "Z",
+                    "requestedLab": request["laboratoryId"],
+                    "detectedLab": detected_lab,
+                    "pwned": pwned_flag,
+                    "userMessage": request["userMessage"]["content"],
+                    "responseSnippet": resp_text[:2000]
+                }
+                log_path = os.path.join(os.path.dirname(__file__), "pwned_log.jsonl")
+                with open(log_path, "a", encoding="utf-8") as lf:
+                    lf.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+            except Exception:
+                # No queremos que el log falle la respuesta al cliente
+                pass
 
+            # Devolvemos la respuesta
             return chatResponse
 
 
