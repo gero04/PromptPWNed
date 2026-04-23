@@ -1,0 +1,187 @@
+/* ===================================================
+   Fish Eye Effect — Efecto de lente ojo de pez
+   Paleta: Vintage Grape, Space Indigo, Lavender Grey
+=================================================== */
+
+:root {
+  /* Paleta fish-eye */
+  --fisheye-grape:        #4E4B65;
+  --fisheye-space-indigo: #2B2B41;
+  --fisheye-lavender:     #9392AB;
+  --fisheye-space-dark:   #303147;
+  --fisheye-space-alt:    #36354E;
+  
+  /* Efectos de profundidad */
+  --fisheye-glow: 0 0 0 4px var(--fisheye-lavender),
+                  0 10px 25px rgba(147, 146, 171, 0.3),
+                  0 20px 50px rgba(43, 43, 65, 0.4);
+  
+  --fisheye-inner-shadow: inset 0 0 60px rgba(43, 43, 65, 0.6),
+                           inset 0 0 100px rgba(78, 75, 101, 0.3);
+}
+
+/* ─── Efecto Fish-Eye en el contenedor de chat ───── */
+.chat-panel, .chat-container, .lab-window {
+  position: relative;
+  border-radius: 6px; /* esquinas ligeramente redondeadas, look cuadrado */
+  transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  overflow: visible; /* Permitir que el efecto sobresalga si hace falta */
+  will-change: transform, border-radius, box-shadow;
+  transform: scale(1.03); /* efecto fish-eye estático */
+  box-shadow: var(--fisheye-glow);
+}
+
+/* Pseudo-elemento para el efecto de reflejo del lente */
+.chat-panel::before, .chat-container::before, .lab-window::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 30%,
+    rgba(43, 43, 65, 0.15) 60%,
+    rgba(78, 75, 101, 0.35) 100%
+  );
+  opacity: 1; /* estático: reflejo siempre visible */
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  z-index: 1;
+}
+
+/* Estado hover: activación del fish-eye */
+.chat-panel, .chat-container, .lab-window {
+  /* Aplicar curvatura agresiva en bordes internos con gradiente visual
+     (mantener border-radius reducido para un look cuadrado con suavizado) */
+  border-color: var(--fisheye-lavender);
+}
+
+/* Activar el reflejo del lente en hover */
+.chat-panel::before, .chat-container::before, .lab-window::before {
+  opacity: 1;
+}
+
+/* Pseudo-elemento adicional para brillo central (efecto lente) */
+.chat-panel::after, .chat-container::after, .lab-window::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    circle,
+    rgba(147, 146, 171, 0.08) 0%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  opacity: 0.9; /* brillo central presente */
+  pointer-events: none;
+  transition: opacity 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  z-index: 1;
+  filter: blur(20px);
+}
+
+
+/* ─── Variante alternativa: Fish-eye MÁS agresivo ───── */
+/* Descomentar esta sección si querés un efecto aún más dramático */
+/*
+.chat-panel:hover {
+  transform: scale(1.05);
+  border-radius: 50px;
+  box-shadow: 0 0 0 6px var(--fisheye-lavender),
+              0 15px 40px rgba(147, 146, 171, 0.4),
+              0 30px 70px rgba(43, 43, 65, 0.5),
+              var(--fisheye-inner-shadow);
+}
+*/
+
+/* ─── Ajustes para elementos internos ────────────── */
+/* Asegurar que el contenido interno no se corte */
+.chat-toolbar,
+.messages,
+.input-area {
+  position: relative;
+  z-index: 2; /* Por encima de los pseudo-elementos */
+}
+
+/* Opcional: sutil distorsión en el fondo del panel (estático) */
+.chat-panel, .chat-container, .lab-window {
+  background: radial-gradient(
+    ellipse at center,
+    var(--panel) 0%,
+    var(--fisheye-space-dark) 100%
+  );
+}
+
+/* ─── Efecto de curvatura en bordes internos ────── */
+.chat-panel .chat-toolbar,
+.chat-container .chat-toolbar,
+.lab-window .chat-toolbar,
+.chat-panel .input-area,
+.chat-container .input-area,
+.lab-window .input-area {
+  border-color: rgba(147, 146, 171, 0.2);
+}
+
+/* ─── Animación de pulsación (opcional) ───────────── */
+@keyframes fisheye-pulse {
+  0%, 100% {
+    box-shadow: var(--fisheye-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--fisheye-lavender),
+                0 12px 30px rgba(147, 146, 171, 0.4),
+                0 25px 60px rgba(43, 43, 65, 0.5);
+  }
+}
+
+/* Activar pulsación en hover (descomentar si se desea) */
+/*
+.chat-panel:hover {
+  animation: fisheye-pulse 2s ease-in-out infinite;
+}
+*/
+
+/* ─── Efecto de destello al entrar en hover ────── */
+@keyframes fisheye-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Eliminado efecto de "flash" al hover: el fish-eye es estático. */
+
+/* ─── Responsive: reducir efecto en móviles ────── */
+@media (max-width: 768px) {
+  .chat-panel, .chat-container, .lab-window {
+    transform: scale(1.02);
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-panel, .chat-container, .lab-window {
+    transform: scale(1.01);
+    border-radius: 6px;
+  }
+}
+
+/* ─── Efecto adicional: distorsión de texto (EXPERIMENTAL) ── */
+/* Este efecto es muy sutil y puede deshabilitarse si causa problemas de legibilidad */
+/*
+.chat-panel:hover .messages {
+  transform: perspective(1000px) rotateX(2deg);
+  transform-origin: center;
+}
+*/

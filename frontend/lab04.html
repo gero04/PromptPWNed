@@ -5,39 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LAB-04 — Jailbreak | Prompt PWNed</title>
 <link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="fisheye-effect.css">
 <style>
   :root {
-    --accent:      var(--red);
-    --accent-dim:  #1a0000;
-    --glow-accent: var(--glow-red);
+    --accent:      var(--green);
+    --accent-dim:  var(--green-dim);
+    --glow-accent: 0 0 10px #7F7BB0, 0 0 20px #7F7BB055;
   }
 
-  /* Red tinted input */
-  textarea { border-color: #ff004022; }
+  /* Neutral panel-tinted input */
+  textarea { border-color: #9392AB22; }
   textarea:focus {
-    border-color: var(--red);
-    box-shadow: inset 0 0 12px rgba(255,0,64,0.05);
+    border-color: var(--accent);
+    box-shadow: inset 0 0 12px rgba(147,146,171,0.05);
   }
-  textarea::placeholder { color: #ff004030; }
+  textarea::placeholder { color: #9392AB30; }
 
   .msg.user .msg-bubble {
-    background: #1a0000;
-    border-color: #ff004033;
-    color: #ff9999;
+    background: #120f1a;
+    border-color: #7F7BB033;
+    color: #e8e5f2;
   }
 
-  /* Pulsing red border on panel */
+  /* Subtle lavender pulse on panel */
   .chat-panel {
-    border-color: #ff004033;
-    box-shadow: 0 0 30px rgba(255,0,64,0.06);
+    border-color: #7F7BB033;
+    box-shadow: 0 0 30px rgba(127,123,176,0.06);
   }
 
-  @keyframes redPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(255,0,64,0.04); }
-    50%       { box-shadow: 0 0 40px rgba(255,0,64,0.12); }
+  @keyframes lavenderPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(127,123,176,0.04); }
+    50%       { box-shadow: 0 0 40px rgba(127,123,176,0.12); }
   }
 
-  .chat-panel { animation: redPulse 4s infinite; }
+  .chat-panel { animation: lavenderPulse 6s infinite; }
 </style>
 </head>
 <body>
@@ -71,7 +72,7 @@
     <div class="chat-toolbar">
       <div class="toolbar-left">
         <span class="conn-dot" style="background: var(--red); box-shadow: var(--glow-red); animation: blink 0.8s infinite;"></span>
-        <span class="toolbar-label" style="color: #ff004066;">SESSION ACTIVE &nbsp;/&nbsp; LAB-04 &nbsp;/&nbsp; JAILBREAK</span>
+        <span class="toolbar-label" style="color: #9392AB66;">SESSION ACTIVE &nbsp;/&nbsp; LAB-04 &nbsp;/&nbsp; JAILBREAK</span>
       </div>
       <div class="toolbar-right">
         <div class="model-selector">

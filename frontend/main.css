@@ -7,19 +7,20 @@
 
 /* ─── Variables ─────────────────────────────────── */
 :root {
-  --green:      #00ff41;
-  --green-dim:  #00cc33;
-  --green-dark: #003300;
-  --red:        #ff0040;
-  --yellow:     #ffd700;
-  --orange:     #ff8800;
-  --cyan:       #00ffff;
-  --bg:         #000500;
-  --panel:      #010d01;
-  --border:     #00ff4133;
-  --glow:       0 0 10px #00ff41, 0 0 20px #00ff4155;
-  --glow-red:   0 0 10px #ff0040, 0 0 20px #ff004055;
-  --glow-cyan:  0 0 10px #00ffff, 0 0 20px #00ffff55;
+  /* Paleta: Vintage Grape / Space Indigo / Lavender Grey */
+  --green:      #9392AB; /* primary accent (lavender) */
+  --green-dim:  #7F7D95; 
+  --green-dark: #2B2B41; /* deep indigo */
+  --red:        #c47fbf; /* muted magenta for accents */
+  --yellow:     #bda6ff; /* soft lavender-yellow tint */
+  --orange:     #9b7bd1;
+  --cyan:       #8bd0ff;
+  --bg:         #0b0b16; /* space indigo background */
+  --panel:      #23233a; /* space indigo / panel */
+  --border:     #9392AB33; /* lavender translucent */
+  --glow:       0 0 10px #9392AB, 0 0 20px #9392AB55;
+  --glow-red:   0 0 10px #c47fbf, 0 0 20px #c47fbf55;
+  --glow-cyan:  0 0 10px #8bd0ff, 0 0 20px #8bd0ff55;
 
   /* Per-lab accent — overridden in each lab page */
   --accent:     var(--green);
@@ -97,7 +98,7 @@ header {
   padding: 40px 20px 30px;
   position: relative;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #001500 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(35,35,58,0.65) 0%, transparent 100%);
 }
 
 .skull {
@@ -163,7 +164,7 @@ h1::after {
   gap: 30px;
   margin-top: 16px;
   font-size: 0.75rem;
-  color: #00ff4188;
+  color: #9392AB88;
   flex-wrap: wrap;
 }
 
@@ -191,7 +192,7 @@ main {
 .section-title {
   font-family: 'VT323', monospace;
   font-size: 1.1rem;
-  color: #00ff4166;
+  color: #9392AB66;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   margin-bottom: 24px;
@@ -222,10 +223,10 @@ main {
   overflow: hidden;
 }
 
-.lab-card:nth-child(1) { animation-delay: 0.1s; border-color: #00ff4144; }
-.lab-card:nth-child(2) { animation-delay: 0.2s; border-color: #ffd70044; }
-.lab-card:nth-child(3) { animation-delay: 0.3s; border-color: #ff880044; }
-.lab-card:nth-child(4) { animation-delay: 0.4s; border-color: #ff004044; }
+.lab-card:nth-child(1) { animation-delay: 0.1s; border-color: #9392AB44; }
+.lab-card:nth-child(2) { animation-delay: 0.2s; border-color: #9392AB44; }
+.lab-card:nth-child(3) { animation-delay: 0.3s; border-color: #8F8ABC44; }
+.lab-card:nth-child(4) { animation-delay: 0.4s; border-color: #7F7BB044; }
 
 /* Sweep shimmer on hover */
 .lab-card::before {
@@ -239,12 +240,12 @@ main {
 
 .lab-card:hover::before { left: 100%; }
 
-.lab-card:hover { transform: translateY(-3px); background: #001800; }
+.lab-card:hover { transform: translateY(-3px); background: var(--panel); }
 
-.lab-card:nth-child(1):hover { border-color: var(--green);  box-shadow: var(--glow),     inset 0 0 24px rgba(0,255,65,0.04);  }
-.lab-card:nth-child(2):hover { border-color: var(--yellow); box-shadow: 0 0 10px #ffd700, 0 0 24px #ffd70055, inset 0 0 24px rgba(255,215,0,0.04); color: var(--yellow); }
-.lab-card:nth-child(3):hover { border-color: var(--orange); box-shadow: 0 0 10px #ff8800, 0 0 24px #ff880055, inset 0 0 24px rgba(255,136,0,0.04); color: var(--orange); }
-.lab-card:nth-child(4):hover { border-color: var(--red);    box-shadow: var(--glow-red),  inset 0 0 24px rgba(255,0,64,0.04); color: var(--red); }
+.lab-card:nth-child(1):hover { border-color: var(--green);  box-shadow: var(--glow),     inset 0 0 24px rgba(147,146,171,0.04);  }
+.lab-card:nth-child(2):hover { border-color: var(--green); box-shadow: 0 0 10px #9392AB, 0 0 24px #9392AB55, inset 0 0 24px rgba(147,146,171,0.04); color: var(--green); }
+.lab-card:nth-child(3):hover { border-color: var(--green); box-shadow: 0 0 10px #8F8ABC, 0 0 24px #8F8ABC55, inset 0 0 24px rgba(143,138,188,0.04); color: var(--green); }
+.lab-card:nth-child(4):hover { border-color: var(--green);    box-shadow: 0 0 10px #7F7BB0,  inset 0 0 24px rgba(127,123,176,0.04); color: var(--green); }
 
 /* Corner accent */
 .lab-card::after {
@@ -316,9 +317,9 @@ main {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.2em;
-  color: #00ff4188;
+  color: #9392AB88;
   text-decoration: none;
-  border: 1px solid #00ff4133;
+  border: 1px solid var(--border);
   padding: 7px 14px;
   transition: all 0.2s;
   margin-bottom: 6px;
@@ -328,7 +329,7 @@ main {
   color: var(--green);
   border-color: var(--green);
   box-shadow: var(--glow);
-  background: #001200;
+  background: rgba(35,35,58,0.5);
 }
 
 .lab-header-meta {
@@ -338,7 +339,7 @@ main {
   gap: 10px;
   padding: 28px 28px 22px;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #001500 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(35,35,58,0.65) 0%, transparent 100%);
 }
 
 .lab-header-top {
@@ -369,7 +370,7 @@ main {
 
 .lab-objective {
   font-size: 0.78rem;
-  color: #00ff4166;
+  color: #9392AB66;
   line-height: 1.6;
   max-width: 700px;
   padding-left: 2px;
@@ -401,7 +402,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #000d00;
+  background: var(--panel);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   flex-shrink: 0;
   gap: 12px;
   flex-wrap: wrap;
@@ -424,7 +427,7 @@ main {
 
 .toolbar-label {
   font-size: 0.75rem;
-  color: #00ff4166;
+  color: #9392AB66;
   letter-spacing: 0.1em;
 }
 
@@ -439,11 +442,11 @@ main {
   align-items: center;
   gap: 8px;
   font-size: 0.72rem;
-  color: #00ff4166;
+  color: #9392AB66;
 }
 
 .model-selector select {
-  background: #001000;
+  background: var(--panel);
   border: 1px solid var(--border);
   color: var(--green);
   padding: 4px 8px;
@@ -458,8 +461,8 @@ main {
 
 .clear-btn {
   background: none;
-  border: 1px solid #ff004033;
-  color: #ff004066;
+  border: 1px solid #9392AB33;
+  color: #9392AB66;
   padding: 4px 12px;
   cursor: pointer;
   font-family: 'Share Tech Mono', monospace;
@@ -467,11 +470,10 @@ main {
   letter-spacing: 0.1em;
   transition: all 0.2s;
 }
-
 .clear-btn:hover {
-  border-color: var(--red);
-  color: var(--red);
-  box-shadow: var(--glow-red);
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--glow-accent);
 }
 
 /* ─── Messages ──────────────────────────────────── */
@@ -537,9 +539,9 @@ main {
 }
 
 .msg.system-msg .msg-bubble {
-  background: #080600;
-  border: 1px solid #ffd70022;
-  color: #ffd70077;
+  background: #0b0710;
+  border: 1px solid #9392AB22;
+  color: #9392ABcc;
   font-size: 0.73rem;
   font-style: italic;
   text-align: center;
@@ -573,7 +575,9 @@ main {
   display: flex;
   gap: 10px;
   align-items: flex-end;
-  background: #000900;
+  background: var(--panel);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
   flex-shrink: 0;
 }
 
@@ -597,7 +601,7 @@ main {
 
 textarea {
   width: 100%;
-  background: #001000;
+  background: var(--panel);
   border: 1px solid var(--border);
   color: var(--green);
   padding: 11px 11px 11px 26px;
@@ -616,10 +620,10 @@ textarea:focus {
   box-shadow: inset 0 0 10px rgba(0,255,65,0.04);
 }
 
-textarea::placeholder { color: #00ff4130; }
+textarea::placeholder { color: #9392AB30; }
 
 .send-btn {
-  background: #001800;
+  background: var(--panel);
   border: 1px solid var(--accent);
   color: var(--accent);
   padding: 0 22px;
@@ -645,7 +649,7 @@ textarea::placeholder { color: #00ff4130; }
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: #001500;
+  background: var(--panel);
   border: 1px solid var(--green);
   color: var(--green);
   padding: 12px 20px;
@@ -677,7 +681,7 @@ footer {
   padding: 18px 20px;
   border-top: 1px solid var(--border);
   font-size: 0.68rem;
-  color: #00ff4130;
+  color: #9392AB30;
   letter-spacing: 0.2em;
 }
 

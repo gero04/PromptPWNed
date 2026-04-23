@@ -5,16 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LAB-03 — Indirect Injection | Prompt PWNed</title>
 <link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="fisheye-effect.css">
 <style>
   :root {
-    --accent:      #ff8800;
-    --accent-dim:  #331a00;
-    --glow-accent: 0 0 10px #ff8800, 0 0 20px #ff880055;
+    --accent:      var(--green);
+    --accent-dim:  var(--green-dim);
+    --glow-accent: 0 0 10px #8F8ABC, 0 0 20px #8F8ABC55;
   }
 
-  textarea:focus { box-shadow: inset 0 0 10px rgba(255,136,0,0.04); }
-  .msg.user .msg-bubble { border-color: #ff880033; color: #ffcc88; }
-  .conn-dot { background: var(--orange); }
+  textarea:focus { box-shadow: inset 0 0 10px rgba(143,138,188,0.04); }
+  .msg.user .msg-bubble { border-color: #8F8ABC33; color: #e9e6f8; }
+  .conn-dot { background: var(--accent); box-shadow: var(--glow-accent); }
 </style>
 </head>
 <body>
