@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+.venv/
+ollama-models/
+backend/pwned_log.jsonl
+odd
