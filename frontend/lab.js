@@ -21,7 +21,8 @@ function initLab({ labId, welcomeMsg }) {
   currentLabId = labId;
   loadModels();
   addSystemMessage(welcomeMsg);
-  document.getElementById('userInput').focus();
+  const inputEl = document.getElementById('userInput');
+  if (inputEl) inputEl.focus();
 }
 
 /* ─── Model loading ────────────────────────────── */
