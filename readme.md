@@ -66,3 +66,20 @@ By accessing and using this lab, you declare that you have read, understood, and
 For inquiries or authorization requests, please contact: gveranovillo@gmail.com
 
 </details>
+
+## Running with Docker Compose
+
+You can launch the entire ecosystem (Ollama, automatic `llama3.2` initializer, FastAPI backend, and frontend web server) with a single command:
+
+```bash
+docker compose up --build
+```
+
+### Architecture & Storage Details
+
+- **Frontend**: `http://localhost:3000`
+- **Backend API**: `http://localhost:8000` (Swagger UI at `http://localhost:8000/docs`)
+- **Ollama API**: `http://localhost:11434`
+- **Host Model Persistence (No Docker Named Volumes)**: Downloaded models (`llama3.2`) are stored directly in `../ollama-models` inside the parent `SDS` directory (`/home/julian/CarpetaCentral/SDS/ollama-models`) via a bind mount (`../ollama-models:/root/.ollama`).
+- **100% RAM Execution**: `llama3.2` is configured with `OLLAMA_KEEP_ALIVE=-1`, `keep_alive: -1`, and `num_gpu: 0` so model weights remain resident in system RAM without unloading between requests.
+

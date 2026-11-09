@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 import httpx
 import os
 import json
@@ -7,9 +7,10 @@ from datetime import datetime
 from .schemas import UserChatRequest
 from pydantic import *
 from .labs_config import LAB_SYSTEM_PROMPTS, LAB_SECRETS
+from .pdf_processor import extract_text_from_pdf
 from fastapi.middleware.cors import CORSMiddleware
 
-OLLAMA_SERVER_URL = "http://127.0.0.1:11434"
+OLLAMA_SERVER_URL = os.getenv("OLLAMA_SERVER_URL", "http://127.0.0.1:11434")
 
 app = FastAPI(title="Proyecto Prompt PWNed - Backend", description="Este es un proyecto educativo cuyo fin es concientizar acerca de diferentes formas básicas de vulnerar un modelo de IA a traves de ingeniería social y prompt injection. Todo lo demostrado aquí es únicamente con fines educativos. Happy hacking!")
 
@@ -85,14 +86,18 @@ async def chat(request: UserChatRequest):
             # Armo el cuerpo de la petición. "stream" va en False porque sino me devuelve la respuesta token por token
             requestBody = {
                 "model": request["aiCurrentModel"],
-                "messages":currentMessages,
-                "stream": False
+                "messages": currentMessages,
+                "stream": False,
+                "keep_alive": -1,
+                "options": {
+                    "num_gpu": 0
+                }
             }
 
             print(f"Este es el request body: \n {requestBody}")
 
             # Guardo la respuesta en la variable response
-            response = await client.post(f"{OLLAMA_SERVER_URL}/api/chat", json=requestBody, timeout=60.0)
+            response = await client.post(f"{OLLAMA_SERVER_URL}/api/chat", json=requestBody, timeout=180.0)
 
             # Verifico que la respuesta es 2XX
             response.raise_for_status()
@@ -151,3 +156,86 @@ async def chat(request: UserChatRequest):
         except httpx.RequestError as error:
             print(f"Este es el error: \n {error}")
             return {"message":f"Se produjo un error de conexion al hacer la peticion a la url {error.request.url}"}
+
+@app.post("/api/chat/pdf")
+async def chat_pdf(
+    file: UploadFile = File(...),
+    laboratoryId: str = Form("lab3"),
+    aiCurrentModel: str = Form("llama3.2"),
+    chatHistory: str = Form("[]")
+):
+    extracted_text = await extract_text_from_pdf(file)
+
+    try:
+        currentMessages = json.loads(chatHistory)
+        if not isinstance(currentMessages, list):
+            currentMessages = []
+    except (json.JSONDecodeError, TypeError):
+        currentMessages = []
+
+    user_message_content = (
+        f"--- INICIO DEL DOCUMENTO PDF ({file.filename}) ---\n"
+        f"{extracted_text}\n"
+        f"--- FIN DEL DOCUMENTO PDF ---"
+    )
+    currentMessages.append({"role": "user", "content": user_message_content})
+
+    system_prompt = LAB_SYSTEM_PROMPTS.get(laboratoryId, LAB_SYSTEM_PROMPTS["lab3"])
+    currentMessages.insert(0, {"role": "system", "content": system_prompt})
+
+    requestBody = {
+        "model": aiCurrentModel,
+        "messages": currentMessages,
+        "stream": False,
+        "keep_alive": -1,
+        "options": {
+            "num_gpu": 0
+        }
+    }
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(f"{OLLAMA_SERVER_URL}/api/chat", json=requestBody, timeout=180.0)
+            response.raise_for_status()
+
+            data = response.json()
+            resp_text = data.get("message", {}).get("content", "")
+
+            detected_lab = None
+            for lab_key, secret_val in LAB_SECRETS.items():
+                if secret_val and secret_val in resp_text:
+                    detected_lab = lab_key
+                    break
+
+            pwned_flag = detected_lab is not None
+
+            chatResponse = {
+                "chatResponse": resp_text,
+                "totalTime": data.get("total_duration"),
+                "done": data.get("done"),
+                "doneReason": data.get("done_reason"),
+                "pwned": pwned_flag,
+                "detectedLab": detected_lab,
+            }
+
+            try:
+                log_entry = {
+                    "ts": datetime.utcnow().isoformat() + "Z",
+                    "requestedLab": laboratoryId,
+                    "detectedLab": detected_lab,
+                    "pwned": pwned_flag,
+                    "userMessage": user_message_content,
+                    "responseSnippet": resp_text[:2000]
+                }
+                log_path = os.path.join(os.path.dirname(__file__), "pwned_log.jsonl")
+                with open(log_path, "a", encoding="utf-8") as lf:
+                    lf.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+            except Exception:
+                pass
+
+            return chatResponse
+
+        except httpx.HTTPStatusError as error:
+            return {"message": f"Se produjo un error al hacer la peticion a la url {OLLAMA_SERVER_URL}. Código de error: {error.response.status_code}"}
+        except httpx.RequestError as error:
+            return {"message": f"Se produjo un error de conexion al hacer la peticion a la url {error.request.url}"}

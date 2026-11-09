@@ -644,6 +644,58 @@ textarea::placeholder { color: #9392AB30; }
 
 .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
+/* ─── PDF Upload (LAB-03) ───────────────────────── */
+.pdf-upload-wrapper {
+  align-items: stretch;
+}
+
+.pdf-select-btn {
+  width: 100%;
+  min-height: 44px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--green);
+  padding: 11px 16px 11px 64px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.84rem;
+  letter-spacing: 0.05em;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+  overflow: hidden;
+}
+
+.pdf-select-btn .prompt-prefix {
+  position: absolute;
+  left: 14px;
+  bottom: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 0.8rem;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.pdf-select-btn:hover {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 10px rgba(0, 255, 65, 0.04);
+  color: #ffffff;
+}
+
+.pdf-select-btn:focus-visible {
+  outline: 1px solid var(--accent);
+}
+
+#pdfFileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ─── Toast ─────────────────────────────────────── */
 .toast {
   position: fixed;
